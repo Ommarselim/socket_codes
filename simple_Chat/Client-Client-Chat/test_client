@@ -1,0 +1,28 @@
+import socket
+import threading
+
+
+def receive_message(server_scoket):
+    while True:
+        try:
+            msg = server_scoket.recv(1024).decode()
+            print("received:" +msg)
+
+        except:
+            break
+def connect():
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    host = "127.0.0.1"
+    port = 12345
+
+    server_socket.connect((host, port))
+
+    receive_thread = threading.Thread(target = receive_message, args=(server_socket,))
+    receive_thread.start()
+    while True:
+        msg = input("you:")
+        server_socket.send(msg.encode())
+
+
+if __name__ == "__main__":
+    connect()
